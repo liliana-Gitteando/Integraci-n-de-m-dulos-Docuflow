@@ -1,21 +1,40 @@
-import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 
 function Layout({ children }) {
   return (
-    <div>
+    <div style={{ display: "flex" }}>
 
-      <Navbar />
+      {/* SIDEBAR */}
+      <Sidebar />
 
-      <div style={{ display: "flex" }}>
-        <Sidebar />
+      {/* CONTENIDO */}
+      <div
+        style={{
+          width: "100%",
+          background: "#f1f5f9",
+          minHeight: "100vh",
+        }}
+      >
 
-        <div style={{
-          padding: "20px",
-          width: "100%"
-        }}>
+        {/* HEADER */}
+        <div
+          style={{
+            background: "#1e293b",
+            color: "white",
+            padding: "20px",
+            fontSize: "28px",
+            fontWeight: "bold",
+            textAlign: "center",
+          }}
+        >
+          DocuFlow - Gestión Documental
+        </div>
+
+        {/* PAGINAS */}
+        <div style={{ padding: "20px" }}>
           {children}
         </div>
+
       </div>
 
     </div>

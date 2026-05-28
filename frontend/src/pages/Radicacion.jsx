@@ -1,13 +1,13 @@
 import Layout from "../components/Layout";
 
-function Documentos() {
+function Radicacion() {
   return (
     <Layout>
 
       <h1 style={{ marginBottom: "20px" }}>
-        Gestión de documetos y archivo 
+        Radicación de Documentos
       </h1>
-      
+
       <form
         style={{
           background: "white",
@@ -17,90 +17,110 @@ function Documentos() {
         }}
       >
 
-        {/* NUMERO RADICADO */}
+        {/* TIPO DOCUMENTO */}
+        <div style={groupStyle}>
+         <label style={{ color: "black" }}>
+            Tipo de Documento
+          </label>
+      
+          <select style={inputStyle}>
+            <option>Seleccione</option>
+            <option>Entrada</option>
+            <option>Salida</option>
+            <option>Interno</option>
+          </select>
+        </div>
+
+        {/* ASUNTO */}
         <div style={groupStyle}>
           <label style={{ color: "black" }}>
-            Número Radicado
+            Asunto
           </label>
 
           <input
             type="text"
-            placeholder="RAD-E-2026-05-00001"
+            placeholder="Ingrese el asunto"
             style={inputStyle}
           />
         </div>
 
-        {/* TIPO DOCUMENTAL */}
+        {/* REMITENTE */}
         <div style={groupStyle}>
           <label style={{ color: "black" }}>
-            Tipo Documental
-          </label>
-
-          <select style={inputStyle}>
-            <option>Seleccione</option>
-            <option>PQRS</option>
-            <option>Factura</option>
-            <option>Contrato</option>
-            <option>Memorando</option>
-          </select>
-        </div>
-
-        {/* SERIE */}
-        <div style={groupStyle}>
-          <label style={{ color: "black" }}>
-            Serie Documental
-          </label>
-
-          <select style={inputStyle}>
-            <option>Seleccione</option>
-            <option>Administrativa</option>
-            <option>Financiera</option>
-            <option>Jurídica</option>
-          </select>
-        </div>
-
-        {/* SUBSERIE */}
-        <div style={groupStyle}>
-          <label style={{ color: "black" }}>
-            Subserie Documental
-          </label>
-
-          <select style={inputStyle}>
-            <option>Seleccione</option>
-            <option>Contratos</option>
-            <option>Informes</option>
-            <option>Correspondencia</option>
-          </select>
-        </div>
-
-        {/* ESTADO */}
-        <div style={groupStyle}>
-          <label style={{ color: "black" }}>
-            Estado Documento
-          </label>
-
-          <select style={inputStyle}>
-            <option>Seleccione</option>
-            <option>Pendiente</option>
-            <option>En Proceso</option>
-            <option>Finalizado</option>
-            <option>Archivado</option>
-          </select>
-        </div>
-
-        {/* ARCHIVO */}
-        <div style={groupStyle}>
-          <label style={{ color: "black" }}>
-            Adjuntar Documento
+            Remitente
           </label>
 
           <input
-            type="file"
+            type="text"
+            placeholder="Ingrese remitente"
             style={inputStyle}
           />
         </div>
 
-        {/* OBSERVACIONES */}
+        {/* DESTINATARIO */}
+        <div style={groupStyle}>
+          <label style={{ color: "black" }}>
+            Destinatario
+          </label>
+
+          <input
+            type="text"
+            placeholder="Ingrese destinatario"
+            style={inputStyle}
+          />
+        </div>
+
+        {/* FECHA */}
+        <div style={groupStyle}>
+          <label style={{ color: "black" }}>
+            Ingrese fecha
+          </label>
+
+          <input
+            type="date"
+            style={inputStyle}
+          />
+        </div>
+
+        <div style={groupStyle}>
+          <label style={{ color: "black" }}>
+            Prioridad
+          </label>
+
+          <select style={inputStyle}>
+            <option>Seleccione</option>
+            <option>Alta</option>
+            <option>Media</option>
+            <option>Baja</option>
+          </select>
+        </div>
+
+          <div style={groupStyle}>
+          <label style={{ color: "black" }}>
+            Dependencia
+          </label>
+
+          <input
+            type="text"
+            placeholder="Ingrese dependencia"
+            style={inputStyle}
+          />
+        </div>
+
+          <div style={groupStyle}>
+          <label style={{ color: "black" }}>
+            Medio de Recepción
+          </label>
+
+          <select style={inputStyle}>
+            <option>Seleccione</option>
+            <option>Correo Electrónico</option>
+            <option>Físico</option>
+            <option>Ventanilla</option>
+            <option>Interno</option>
+          </select>
+        </div>
+
         <div style={groupStyle}>
           <label style={{ color: "black" }}>
             Observaciones
@@ -115,11 +135,22 @@ function Documentos() {
           />
         </div>
 
+        <div style={groupStyle}>
+            <label style={{ color: "black" }}>
+              Adjuntar Documento
+            </label>
+
+            <input
+              type="file"
+              style={inputStyle}
+            />
+         </div>
+
         {/* BOTON */}
         <button
           type="submit"
           style={{
-            background: "#2563eb",
+            background: "#1946a3",
             color: "white",
             padding: "12px 20px",
             border: "none",
@@ -127,7 +158,7 @@ function Documentos() {
             cursor: "pointer",
           }}
         >
-          Guardar Documento
+          Radicar Documento
         </button>
 
       </form>
@@ -151,4 +182,4 @@ const groupStyle = {
   marginBottom: "20px",
 };
 
-export default Documentos;
+export default Radicacion;

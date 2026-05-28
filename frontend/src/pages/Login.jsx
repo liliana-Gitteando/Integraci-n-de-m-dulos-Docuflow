@@ -1,5 +1,22 @@
+import { useState } from "react";
 import logo from "../assets/logo.jpg";
 function Login() {
+  
+  const [usuario, setUsuario] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = (e) => {
+
+  e.preventDefault();
+
+  console.log("Usuario:", usuario);
+  console.log("Password:", password);
+
+};
+
+  console.log(usuario);
+  console.log(password);
+  
   return (
     <div style={{
       display: "flex",
@@ -8,7 +25,7 @@ function Login() {
       height: "100vh",
       background: "#e2e8f0"
     }}>
-
+      
       <div style={{
         background: "white",
         padding: "40px",
@@ -45,38 +62,50 @@ function Login() {
         <form>
 
           <div style={{ marginBottom: "20px" }}>
-            <label>Correo</label>
+            <label>usuario</label>
 
-            <input
-              type="email"
-              placeholder="Ingrese su correo"
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginTop: "5px"
-              }}
-            />
+              <input
+               type="text"
+               placeholder="Ingrese su usuario"
+               value={usuario}
+               onChange={(e) => setUsuario(e.target.value)}
+               style={{
+                  width: "100%",
+                  padding: "10px",
+                  marginTop: "5px",
+                  background: "#f8fafc",
+                  border: "1px solid #cbd5e1",
+                  color: "black",
+                }}
+              />
+              
           </div>
 
           <div style={{ marginBottom: "20px" }}>
             <label>Contraseña</label>
 
-            <input
-              type="password"
-              placeholder="Ingrese su contraseña"
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginTop: "5px"
-              }}
-            />
+           <input
+                type="password"
+                placeholder="Ingrese su contraseña"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  marginTop: "5px",
+                  background: "#f8fafc",
+                  border: "1px solid #cbd5e1",
+                  color: "black",
+                }}
+              />
           </div>
 
           <button
+            onClick={handleLogin}
             style={{
               width: "100%",
               padding: "12px",
-              background: "#1e293b",
+              background: "#1946a3",
               color: "white",
               border: "none",
               cursor: "pointer"
@@ -84,7 +113,7 @@ function Login() {
           >
             Iniciar Sesión
           </button>
-
+            
         </form>
 
       </div>

@@ -13,10 +13,12 @@ function Sidebar() {
 
       <ul style={{ listStyle: "none", padding: 0 }}>
         <li><Link to="/dashboard">Dashboard</Link></li>
+        <li><Link to="/radicacion">Radicación</Link></li>
         <li><Link to="/documentos">Documentos</Link></li>
-        <li><Link to="/reportes">Reportes</Link></li>
         <li><Link to="/alertas">Alertas</Link></li>
+        <li><Link to="/reportes">Reportes</Link></li>
         <li><Link to="/usuarios">Usuarios</Link></li>
+        <li><Link to="/cerrar cesión">Cerrar cesión</Link></li>
       </ul>
     </div>
   );
