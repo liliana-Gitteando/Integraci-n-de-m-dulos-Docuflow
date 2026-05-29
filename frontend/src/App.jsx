@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
@@ -11,38 +11,18 @@ import Radicacion from "./pages/Radicacion";
 function App() {
   return (
     <BrowserRouter>
-
-          <nav>
-          <ul>
-          <li><Link to="/">Login</Link></li>
-          <li><Link to="/dashboard">Dashboard</Link></li>
-          <li><Link to="/radicacion">Radicacion</Link></li>
-          <li><Link to="/documentos">Documentos</Link></li>
-          <li><Link to="/alertas">Alertas</Link></li>
-          <li><Link to="/reportes">Reportes</Link></li>
-          <li><Link to="/usuarios">Usuarios</Link></li>
-          
-          </ul>
-          </nav>
-
       <Routes>
-
+        {/* Ruta pública */}
         <Route path="/" element={<Login />} />
 
+        {/* Rutas protegidas (por ahora abiertas) */}
         <Route path="/dashboard" element={<Dashboard />} />
-
-        <Route path="/documentos" element={<Documentos />} />
-
-        <Route path="/reportes" element={<Reportes />} />
-
-        <Route path="/alertas" element={<Alertas />} />
-
-        <Route path="/usuarios" element={<Usuarios />} />
-
         <Route path="/radicacion" element={<Radicacion />} />
-
+        <Route path="/documentos" element={<Documentos />} />
+        <Route path="/alertas" element={<Alertas />} />
+        <Route path="/reportes" element={<Reportes />} />
+        <Route path="/usuarios" element={<Usuarios />} />
       </Routes>
-
     </BrowserRouter>
   );
 }
