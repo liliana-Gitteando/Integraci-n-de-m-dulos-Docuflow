@@ -52,7 +52,7 @@ function Login() {
 
       console.error(error);
 
-      setError("Error conectando con el servidor");
+      setError("Error de usuario o contraseña");
 
     } finally {
 
