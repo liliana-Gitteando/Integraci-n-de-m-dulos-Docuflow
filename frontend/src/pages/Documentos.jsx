@@ -1,154 +1,161 @@
 import Layout from "../components/Layout";
+import { useEffect, useState } from "react";
 
 function Documentos() {
+
+  const [documentos, setDocumentos] = useState([]);
+  const [busqueda, setBusqueda] = useState("");
+
+  useEffect(() => {
+    cargarDocumentos();
+  }, []);
+
+  const cargarDocumentos = async () => {
+
+    try {
+
+      const response = await fetch(
+        "http://localhost:7000/documentos"
+      );
+
+      const data = await response.json();
+
+      setDocumentos(data);
+
+    } catch (error) {
+
+      console.error(error);
+      alert("Error al cargar documentos");
+    }
+  };
+
+  const documentosFiltrados = documentos.filter((doc) =>
+    doc.numeroRadicado
+      ?.toLowerCase()
+      .includes(busqueda.toLowerCase())
+  );
+
   return (
     <Layout>
 
       <h1 style={{ marginBottom: "20px" }}>
-        Gestión de documetos y archivo 
+        Consultar Documentos
       </h1>
-      
-      <form
+
+      <input
+        type="text"
+        placeholder="Buscar por radicado"
+        value={busqueda}
+        onChange={(e) => setBusqueda(e.target.value)}
         style={{
+          width: "100%",
+          padding: "12px",
+          marginBottom: "20px",
+          border: "1px solid #cbd5e1",
+          borderRadius: "6px",
+          color: "black",
           background: "white",
-          padding: "30px",
+          color: "black",
+        }}
+      />
+
+      <div
+        style={{
+          overflowX: "auto",
+          background: "white",
+          padding: "20px",
           borderRadius: "10px",
-          boxShadow: "0px 2px 10px rgba(0,0,0,0.1)",
         }}
       >
 
-        {/* NUMERO RADICADO */}
-        <div style={groupStyle}>
-          <label style={{ color: "black" }}>
-            Número Radicado
-          </label>
-
-          <input
-            type="text"
-            placeholder="RAD-E-2026-05-00001"
-            style={inputStyle}
-          />
-        </div>
-
-        {/* TIPO DOCUMENTAL */}
-        <div style={groupStyle}>
-          <label style={{ color: "black" }}>
-            Tipo Documental
-          </label>
-
-          <select style={inputStyle}>
-            <option>Seleccione</option>
-            <option>PQRS</option>
-            <option>Factura</option>
-            <option>Contrato</option>
-            <option>Memorando</option>
-          </select>
-        </div>
-
-        {/* SERIE */}
-        <div style={groupStyle}>
-          <label style={{ color: "black" }}>
-            Serie Documental
-          </label>
-
-          <select style={inputStyle}>
-            <option>Seleccione</option>
-            <option>Administrativa</option>
-            <option>Financiera</option>
-            <option>Jurídica</option>
-          </select>
-        </div>
-
-        {/* SUBSERIE */}
-        <div style={groupStyle}>
-          <label style={{ color: "black" }}>
-            Subserie Documental
-          </label>
-
-          <select style={inputStyle}>
-            <option>Seleccione</option>
-            <option>Contratos</option>
-            <option>Informes</option>
-            <option>Correspondencia</option>
-          </select>
-        </div>
-
-        {/* ESTADO */}
-        <div style={groupStyle}>
-          <label style={{ color: "black" }}>
-            Estado Documento
-          </label>
-
-          <select style={inputStyle}>
-            <option>Seleccione</option>
-            <option>Pendiente</option>
-            <option>En Proceso</option>
-            <option>Finalizado</option>
-            <option>Archivado</option>
-          </select>
-        </div>
-
-        {/* ARCHIVO */}
-        <div style={groupStyle}>
-          <label style={{ color: "black" }}>
-            Adjuntar Documento
-          </label>
-
-          <input
-            type="file"
-            style={inputStyle}
-          />
-        </div>
-
-        {/* OBSERVACIONES */}
-        <div style={groupStyle}>
-          <label style={{ color: "black" }}>
-            Observaciones
-          </label>
-
-          <textarea
-            placeholder="Ingrese observaciones"
-            style={{
-              ...inputStyle,
-              height: "100px",
-            }}
-          />
-        </div>
-
-        {/* BOTON */}
-        <button
-          type="submit"
+        <table
           style={{
-            background: "#2563eb",
-            color: "white",
-            padding: "12px 20px",
-            border: "none",
-            borderRadius: "6px",
-            cursor: "pointer",
+            width: "100%",
+            borderCollapse: "collapse",
           }}
         >
-          Guardar Documento
-        </button>
+          <thead>
 
-      </form>
+            <tr>
+
+              <th style={thStyle}>Radicado</th>
+
+              <th style={thStyle}>Tipo</th>
+
+              <th style={thStyle}>Asunto</th>
+
+              <th style={thStyle}>Remitente</th>
+
+              <th style={thStyle}>Destinatario</th>
+
+              <th style={thStyle}>Dependencia</th>
+
+              <th style={thStyle}>Estado</th>
+
+            </tr>
+
+          </thead>
+
+          <tbody>
+
+            {documentosFiltrados.map((doc) => (
+
+              <tr key={doc.id}>
+
+                <td style={tdStyle}>
+                  {doc.numeroRadicado}
+                </td>
+
+                <td style={tdStyle}>
+                  {doc.tipoDocumento}
+                </td>
+
+                <td style={tdStyle}>
+                  {doc.asunto}
+                </td>
+
+                <td style={tdStyle}>
+                  {doc.remitente}
+                </td>
+
+                <td style={tdStyle}>
+                  {doc.destinatario}
+                </td>
+
+                <td style={tdStyle}>
+                  {doc.dependencia}
+                </td>
+
+                <td style={tdStyle}>
+                  {doc.estado}
+                </td>
+
+              </tr>
+
+            ))}
+
+          </tbody>
+
+        </table>
+
+      </div>
 
     </Layout>
   );
 }
 
-/* INPUTS */
-const inputStyle = {
-  width: "100%",
-  padding: "12px",
-  marginTop: "5px",
-  borderRadius: "6px",
+/* GRUPOS */
+const thStyle = {
   border: "1px solid #cbd5e1",
-  background: "#f8fafc",
+  padding: "12px",
+  background: "#1946a3",
+  color: "white",
 };
 
-/* GRUPOS */
-const groupStyle = {
-  marginBottom: "20px",
+const tdStyle = {
+  border: "1px solid #cbd5e1",
+  padding: "10px",
+  color: "black",
 };
 
 export default Documentos;
