@@ -1,6 +1,59 @@
+import { useState } from "react";
 import Layout from "../components/Layout";
 
 function Radicacion() {
+
+  const [tipoDocumento, setTipoDocumento] = useState("");
+  const [asunto, setAsunto] = useState("");
+  const [remitente, setRemitente] = useState("");
+  const [destinatario, setDestinatario] = useState("");
+  const [fechaRadicacion, setFechaRadicacion] = useState("");
+  const [dependencia, setDependencia] = useState("");
+  const [observaciones, setObservaciones] = useState("");
+
+  const handleSubmit = async (e) => {
+
+    e.preventDefault();
+
+    const documento = {
+      tipoDocumento,
+      asunto,
+      remitente,
+      destinatario,
+      fechaRadicacion,
+      dependencia,
+      observaciones,
+      usuarioId: 1
+    };
+
+    try {
+
+      const response = await fetch(
+        "http://localhost:7000/documentos",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(documento)
+        }
+      );
+
+      const mensaje = await response.text();
+
+      if (response.ok) {
+        alert(mensaje);
+      } else {
+        alert("Error: " + mensaje);
+      }
+
+    } catch (error) {
+
+      console.error(error);
+      alert("No fue posible conectar con el servidor");
+    }
+  };
+
   return (
     <Layout>
 
@@ -9,6 +62,7 @@ function Radicacion() {
       </h1>
 
       <form
+        onSubmit={handleSubmit}
         style={{
           background: "white",
           padding: "30px",
@@ -17,21 +71,23 @@ function Radicacion() {
         }}
       >
 
-        {/* TIPO DOCUMENTO */}
         <div style={groupStyle}>
-         <label style={{ color: "black" }}>
+          <label style={{ color: "black" }}>
             Tipo de Documento
           </label>
-      
-          <select style={inputStyle}>
-            <option>Seleccione</option>
-            <option>Entrada</option>
-            <option>Salida</option>
-            <option>Interno</option>
+
+          <select
+            style={inputStyle}
+            value={tipoDocumento}
+            onChange={(e) => setTipoDocumento(e.target.value)}
+          >
+            <option value="">Seleccione</option>
+            <option value="E">Entrada</option>
+            <option value="S">Salida</option>
+            <option value="I">Interno</option>
           </select>
         </div>
 
-        {/* ASUNTO */}
         <div style={groupStyle}>
           <label style={{ color: "black" }}>
             Asunto
@@ -41,10 +97,11 @@ function Radicacion() {
             type="text"
             placeholder="Ingrese el asunto"
             style={inputStyle}
+            value={asunto}
+            onChange={(e) => setAsunto(e.target.value)}
           />
         </div>
 
-        {/* REMITENTE */}
         <div style={groupStyle}>
           <label style={{ color: "black" }}>
             Remitente
@@ -54,10 +111,11 @@ function Radicacion() {
             type="text"
             placeholder="Ingrese remitente"
             style={inputStyle}
+            value={remitente}
+            onChange={(e) => setRemitente(e.target.value)}
           />
         </div>
 
-        {/* DESTINATARIO */}
         <div style={groupStyle}>
           <label style={{ color: "black" }}>
             Destinatario
@@ -67,10 +125,11 @@ function Radicacion() {
             type="text"
             placeholder="Ingrese destinatario"
             style={inputStyle}
+            value={destinatario}
+            onChange={(e) => setDestinatario(e.target.value)}
           />
         </div>
 
-        {/* FECHA */}
         <div style={groupStyle}>
           <label style={{ color: "black" }}>
             Ingrese fecha
@@ -79,6 +138,8 @@ function Radicacion() {
           <input
             type="date"
             style={inputStyle}
+            value={fechaRadicacion}
+            onChange={(e) => setFechaRadicacion(e.target.value)}
           />
         </div>
 
@@ -95,7 +156,7 @@ function Radicacion() {
           </select>
         </div>
 
-          <div style={groupStyle}>
+        <div style={groupStyle}>
           <label style={{ color: "black" }}>
             Dependencia
           </label>
@@ -104,10 +165,12 @@ function Radicacion() {
             type="text"
             placeholder="Ingrese dependencia"
             style={inputStyle}
+            value={dependencia}
+            onChange={(e) => setDependencia(e.target.value)}
           />
         </div>
 
-          <div style={groupStyle}>
+        <div style={groupStyle}>
           <label style={{ color: "black" }}>
             Medio de Recepción
           </label>
@@ -128,6 +191,8 @@ function Radicacion() {
 
           <textarea
             placeholder="Ingrese observaciones"
+            value={observaciones}
+            onChange={(e) => setObservaciones(e.target.value)}
             style={{
               ...inputStyle,
               height: "100px",
@@ -136,17 +201,16 @@ function Radicacion() {
         </div>
 
         <div style={groupStyle}>
-            <label style={{ color: "black" }}>
-              Adjuntar Documento
-            </label>
+          <label style={{ color: "black" }}>
+            Adjuntar Documento
+          </label>
 
-            <input
-              type="file"
-              style={inputStyle}
-            />
-         </div>
+          <input
+            type="file"
+            style={inputStyle}
+          />
+        </div>
 
-        {/* BOTON */}
         <button
           type="submit"
           style={{
@@ -167,7 +231,6 @@ function Radicacion() {
   );
 }
 
-/* INPUTS */
 const inputStyle = {
   width: "100%",
   padding: "12px",
@@ -175,9 +238,9 @@ const inputStyle = {
   borderRadius: "6px",
   border: "1px solid #cbd5e1",
   background: "#f8fafc",
+  color: "black",
 };
 
-/* GRUPOS */
 const groupStyle = {
   marginBottom: "20px",
 };

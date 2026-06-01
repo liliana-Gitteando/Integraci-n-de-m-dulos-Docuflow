@@ -115,6 +115,7 @@ const inputStyle = {
   borderRadius: "6px",
   border: "1px solid #cbd5e1",
   background: "#f8fafc",
+   color: "black",
 };
 
 /* GRUPOS */
