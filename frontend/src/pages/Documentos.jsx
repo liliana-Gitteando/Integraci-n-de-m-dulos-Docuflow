@@ -42,6 +42,8 @@ function Documentos() {
         Consultar Documentos
       </h1>
 
+      <h2>PRUEBA GIT DOCUMENTOS</h2>
+
       <input
         type="text"
         placeholder="Buscar por radicado"
