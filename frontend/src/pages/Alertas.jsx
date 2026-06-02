@@ -1,6 +1,54 @@
+import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 
 function Alertas() {
+
+  const [alertas, setAlertas] = useState([]);
+
+  useEffect(() => {
+
+    console.log("CONSULTANDO ALERTAS...");
+
+    fetch("http://localhost:7000/alertas")
+      .then((response) => response.json())
+      .then((data) => {
+
+        console.log("DATOS RECIBIDOS:");
+        console.log(data);
+
+        setAlertas(data);
+
+      })
+      .catch((error) => {
+
+        console.error("ERROR AL CONSULTAR ALERTAS:");
+        console.error(error);
+
+      });
+
+  }, []);
+
+  const alertasCriticas =
+    alertas.filter(
+      (a) =>
+        a.diasRestantes !== null &&
+        a.diasRestantes <= 3
+    ).length;
+
+  const proximasVencer =
+    alertas.filter(
+      (a) =>
+        a.diasRestantes !== null &&
+        a.diasRestantes <= 7
+    ).length;
+
+  const gestionadas =
+    alertas.filter(
+      (a) =>
+        a.estado &&
+        a.estado.toLowerCase() === "gestionada"
+    ).length;
+
   return (
     <Layout>
 
@@ -12,28 +60,34 @@ function Alertas() {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
+          gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))",
           gap: "20px",
           marginBottom: "30px",
         }}
       >
 
         <div style={cardStyle}>
-          <h2 style={{ color: "#dc2626" }}>5</h2>
+          <h2 style={{ color: "#dc2626" }}>
+            {alertasCriticas}
+          </h2>
           <p style={{ color: "#475569" }}>
             Alertas Críticas
           </p>
         </div>
 
         <div style={cardStyle}>
-          <h2 style={{ color: "#f59e0b" }}>12</h2>
+          <h2 style={{ color: "#f59e0b" }}>
+            {proximasVencer}
+          </h2>
           <p style={{ color: "#475569" }}>
             Próximas a Vencer
           </p>
         </div>
 
         <div style={cardStyle}>
-          <h2 style={{ color: "#2563eb" }}>20</h2>
+          <h2 style={{ color: "#2563eb" }}>
+            {gestionadas}
+          </h2>
           <p style={{ color: "#475569" }}>
             Gestionadas
           </p>
@@ -41,7 +95,7 @@ function Alertas() {
 
       </div>
 
-      {/* TABLA ALERTAS */}
+      {/* TABLA */}
       <div
         style={{
           background: "white",
@@ -51,67 +105,97 @@ function Alertas() {
         }}
       >
 
-        <h2 style={{ marginBottom: "20px" }}>
+        <h2 style={{ marginBottom: "20px", color: "black" }}>
           Alertas Activas
         </h2>
 
-        <table
-          style={{
-            width: "100%",
-            borderCollapse: "collapse",
-          }}
-        >
+        <div style={{ overflowX: "auto" }}>
 
-          <thead>
-            <tr
-              style={{
-                background: "#60a5fa",
-                color: "white",
-              }}
-            >
-              <th style={tableStyle}>Radicado</th>
-              <th style={tableStyle}>Tipo</th>
-              <th style={tableStyle}>Prioridad</th>
-              <th style={tableStyle}>Vencimiento</th>
-              <th style={tableStyle}>Estado</th>
-            </tr>
-          </thead>
+          <table
+            style={{
+              width: "100%",
+              borderCollapse: "collapse",
+            }}
+          >
 
-          <tbody>
+            <thead>
+              <tr
+                style={{
+                  background: "#60a5fa",
+                  color: "white",
+                }}
+              >
+                <th style={tableStyle}>ID</th>
+                <th style={tableStyle}>Tipo</th>
+                <th style={tableStyle}>Descripción</th>
+                <th style={tableStyle}>Días Restantes</th>
+                <th style={tableStyle}>Estado</th>
+              </tr>
+            </thead>
 
-            <tr>
-              <td style={tableStyle}>RAD-E-001</td>
-              <td style={tableStyle}>PQRS</td>
-              <td style={{ ...tableStyle, color: "#dc2626" }}>
-                Alta
-              </td>
-              <td style={tableStyle}>26/05/2026</td>
-              <td style={tableStyle}>Pendiente</td>
-            </tr>
+            <tbody>
 
-            <tr>
-              <td style={tableStyle}>RAD-S-002</td>
-              <td style={tableStyle}>Contrato</td>
-              <td style={{ ...tableStyle, color: "#f59e0b" }}>
-                Media
-              </td>
-              <td style={tableStyle}>28/05/2026</td>
-              <td style={tableStyle}>En Proceso</td>
-            </tr>
+              {alertas.length === 0 ? (
 
-            <tr>
-              <td style={tableStyle}>RAD-I-003</td>
-              <td style={tableStyle}>Memorando</td>
-              <td style={{ ...tableStyle, color: "#2563eb" }}>
-                Baja
-              </td>
-              <td style={tableStyle}>30/05/2026</td>
-              <td style={tableStyle}>Gestionada</td>
-            </tr>
+                <tr>
+                  <td
+                    colSpan="5"
+                    style={{
+                      textAlign: "center",
+                      padding: "20px",
+                      color: "black",
+                    }}
+                  >
+                    No hay alertas registradas
+                  </td>
+                </tr>
 
-          </tbody>
+              ) : (
 
-        </table>
+                alertas.map((alerta) => (
+
+                  <tr key={alerta.id}>
+
+                      <td
+                    style={{
+                      ...tableStyle,
+                      color:
+                        alerta.estado === "vencido"
+                          ? "#dc2626"
+                          : alerta.estado === "pendiente"
+                          ? "#f59e0b"
+                          : "#16a34a",
+                    }}
+                  >
+                    {alerta.estado}
+                  </td>
+                    <td style={tableStyle}>
+                      {alerta.tipoAlerta}
+                    </td>
+
+                    <td style={tableStyle}>
+                      {alerta.descripcion}
+                    </td>
+
+                    <td style={tableStyle}>
+                      {alerta.diasRestantes}
+                    </td>
+
+                    <td style={tableStyle}>
+                      {alerta.estado}
+                    </td>
+
+                  </tr>
+
+                ))
+
+              )}
+
+            </tbody>
+
+          </table>
+
+        </div>
 
       </div>
 
@@ -127,6 +211,13 @@ const cardStyle = {
   textAlign: "center",
   boxShadow: "0px 2px 10px rgba(0,0,0,0.1)",
 };
+
+{
+  alerta.fechaCreacion
+    ? new Date(alerta.fechaCreacion)
+        .toLocaleDateString("es-CO")
+    : ""
+}
 
 /* TABLA */
 const tableStyle = {
