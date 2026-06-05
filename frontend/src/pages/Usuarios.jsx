@@ -1,8 +1,6 @@
-import Layout from "../components/Layout";
-
 function Usuarios() {
   return (
-    <Layout>
+    <>
 
       <h1 style={{ marginBottom: "20px" }}>
         Gestión de Usuarios
@@ -103,7 +101,7 @@ function Usuarios() {
 
       </form>
 
-    </Layout>
+    </>
   );
 }
 

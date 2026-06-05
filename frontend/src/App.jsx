@@ -2,26 +2,75 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import Documentos from "./pages/Documentos";
-import Reportes from "./pages/Reportes";
-import Alertas from "./pages/Alertas";
-import Usuarios from "./pages/Usuarios";
 import Radicacion from "./pages/Radicacion";
+import Documentos from "./pages/Documentos";
+import Alertas from "./pages/Alertas";
+import Reportes from "./pages/Reportes";
+import Usuarios from "./pages/Usuarios";
+
+import Layout from "./components/Layout";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Ruta pública */}
+
         <Route path="/" element={<Login />} />
 
-        {/* Rutas protegidas (por ahora abiertas) */}
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/radicacion" element={<Radicacion />} />
-        <Route path="/documentos" element={<Documentos />} />
-        <Route path="/alertas" element={<Alertas />} />
-        <Route path="/reportes" element={<Reportes />} />
-        <Route path="/usuarios" element={<Usuarios />} />
+        <Route
+          path="/dashboard"
+          element={
+            <Layout>
+              <Dashboard />
+            </Layout>
+          }
+        />
+
+        <Route
+          path="/radicacion"
+          element={
+            <Layout>
+              <Radicacion />
+            </Layout>
+          }
+        />
+
+        <Route
+          path="/documentos"
+          element={
+            <Layout>
+              <Documentos />
+            </Layout>
+          }
+        />
+
+        <Route
+          path="/alertas"
+          element={
+            <Layout>
+              <Alertas />
+            </Layout>
+          }
+        />
+
+        <Route
+          path="/reportes"
+          element={
+            <Layout>
+              <Reportes />
+            </Layout>
+          }
+        />
+
+        <Route
+          path="/usuarios"
+          element={
+            <Layout>
+              <Usuarios />
+            </Layout>
+          }
+        />
+
       </Routes>
     </BrowserRouter>
   );

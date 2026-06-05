@@ -1,230 +1,150 @@
 import { useEffect, useState } from "react";
-import Layout from "../components/Layout";
 
-function Alertas() {
+export default function Alertas() {
 
   const [alertas, setAlertas] = useState([]);
+  const [busqueda, setBusqueda] = useState("");
 
   useEffect(() => {
-
-    console.log("CONSULTANDO ALERTAS...");
 
     fetch("http://localhost:7000/alertas")
       .then((response) => response.json())
       .then((data) => {
-
-        console.log("DATOS RECIBIDOS:");
-        console.log(data);
-
         setAlertas(data);
-
       })
       .catch((error) => {
-
-        console.error("ERROR AL CONSULTAR ALERTAS:");
-        console.error(error);
-
+        console.error("Error cargando alertas:", error);
       });
 
   }, []);
 
-  const alertasCriticas =
-    alertas.filter(
-      (a) =>
-        a.diasRestantes !== null &&
-        a.diasRestantes <= 3
-    ).length;
-
-  const proximasVencer =
-    alertas.filter(
-      (a) =>
-        a.diasRestantes !== null &&
-        a.diasRestantes <= 7
-    ).length;
-
-  const gestionadas =
-    alertas.filter(
-      (a) =>
-        a.estado &&
-        a.estado.toLowerCase() === "gestionada"
-    ).length;
+  const alertasFiltradas = alertas.filter((alerta) =>
+    alerta.descripcion
+      ?.toLowerCase()
+      .includes(busqueda.toLowerCase())
+  );
 
   return (
-    <Layout>
+    <div
+      style={{
+        padding: "20px",
+        background: "#f8fafc",
+        minHeight: "100vh"
+      }}
+    >
+      <h1>Gestión de Alertas</h1>
 
-      <h1 style={{ marginBottom: "20px" }}>
-        Gestión de Alertas
-      </h1>
-
-      {/* TARJETAS */}
-      <div
+      <input
+        type="text"
+        placeholder="Buscar por descripción"
+        value={busqueda}
+        onChange={(e) => setBusqueda(e.target.value)}
         style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))",
-          gap: "20px",
-          marginBottom: "30px",
+          width: "400px",
+          padding: "10px",
+          marginBottom: "20px",
+          borderRadius: "5px",
+          border: "1px solid #ccc"
+        }}
+      />
+
+      <table
+        style={{
+          width: "100%",
+          borderCollapse: "collapse",
+          background: "white"
         }}
       >
-
-        <div style={cardStyle}>
-          <h2 style={{ color: "#dc2626" }}>
-            {alertasCriticas}
-          </h2>
-          <p style={{ color: "#475569" }}>
-            Alertas Críticas
-          </p>
-        </div>
-
-        <div style={cardStyle}>
-          <h2 style={{ color: "#f59e0b" }}>
-            {proximasVencer}
-          </h2>
-          <p style={{ color: "#475569" }}>
-            Próximas a Vencer
-          </p>
-        </div>
-
-        <div style={cardStyle}>
-          <h2 style={{ color: "#2563eb" }}>
-            {gestionadas}
-          </h2>
-          <p style={{ color: "#475569" }}>
-            Gestionadas
-          </p>
-        </div>
-
-      </div>
-
-      {/* TABLA */}
-      <div
-        style={{
-          background: "white",
-          padding: "20px",
-          borderRadius: "10px",
-          boxShadow: "0px 2px 10px rgba(0,0,0,0.1)",
-        }}
-      >
-
-        <h2 style={{ marginBottom: "20px", color: "black" }}>
-          Alertas Activas
-        </h2>
-
-        <div style={{ overflowX: "auto" }}>
-
-          <table
+        <thead>
+          <tr
             style={{
-              width: "100%",
-              borderCollapse: "collapse",
+              background: "#1e40af",
+              color: "white"
             }}
           >
+            <th>ID</th>
+            <th>Documento</th>
+            <th>Tipo</th>
+            <th>Descripción</th>
+            <th>Estado</th>
+            <th>Fecha Notificación</th>
+            <th>Fecha Límite</th>
+            <th>Días Restantes</th>
+            <th>PQRS</th>
+          </tr>
+        </thead>
 
-            <thead>
-              <tr
-                style={{
-                  background: "#60a5fa",
-                  color: "white",
-                }}
-              >
-                <th style={tableStyle}>ID</th>
-                <th style={tableStyle}>Tipo</th>
-                <th style={tableStyle}>Descripción</th>
-                <th style={tableStyle}>Días Restantes</th>
-                <th style={tableStyle}>Estado</th>
-              </tr>
-            </thead>
+        <tbody>
 
-            <tbody>
+          {alertasFiltradas.map((alerta) => (
 
-              {alertas.length === 0 ? (
+           <tr
+            key={alerta.id}
+            style={{
+              backgroundColor: "white",
+              borderBottom: "1px solid #e5e7eb"
+            }}
+          >
+              <td>{alerta.id}</td>
 
-                <tr>
-                  <td
-                    colSpan="5"
-                    style={{
-                      textAlign: "center",
-                      padding: "20px",
-                      color: "black",
-                    }}
-                  >
-                    No hay alertas registradas
-                  </td>
-                </tr>
+              <td>{alerta.documentoId}</td>
 
-              ) : (
+              <td>{alerta.tipoAlerta}</td>
 
-                alertas.map((alerta) => (
+              <td>{alerta.descripcion}</td>
 
-                  <tr key={alerta.id}>
+    <td>
+    <span
+      style={{
+      padding: "4px 10px",
+      borderRadius: "10px",
+      fontWeight: "bold",
+      backgroundColor:
+        alerta.estado?.toLowerCase() === "pendiente"
+          ? "#fef3c7"
+          : alerta.estado?.toLowerCase() === "vencido"
+          ? "#fee2e2"
+          : alerta.estado?.toLowerCase() === "atendida"
+          ? "#dcfce7"
+          : "#f3f4f6",
+      color:
+        alerta.estado?.toLowerCase() === "pendiente"
+          ? "#ffd200"
+          : alerta.estado?.toLowerCase() === "vencido"
+          ? "#b91c1c"
+          : alerta.estado?.toLowerCase() === "atendida"
+          ? "#86EFAC"
+          : "#111827"
+    }}
+  >
+    {alerta.estado}
+  </span>
+</td>
 
-                      <td
-                    style={{
-                      ...tableStyle,
-                      color:
-                        alerta.estado === "vencido"
-                          ? "#dc2626"
-                          : alerta.estado === "pendiente"
-                          ? "#f59e0b"
-                          : "#16a34a",
-                    }}
-                  >
-                    {alerta.estado}
-                  </td>
-                    <td style={tableStyle}>
-                      {alerta.tipoAlerta}
-                    </td>
+              <td>
+                {alerta.fechaNotificacion
+                  ? new Date(alerta.fechaNotificacion).toLocaleDateString()
+                  : ""}
+              </td>
 
-                    <td style={tableStyle}>
-                      {alerta.descripcion}
-                    </td>
+              <td>
+                {alerta.fechaLimiteRespuesta
+                  ? new Date(alerta.fechaLimiteRespuesta).toLocaleDateString()
+                  : ""}
+              </td>
 
-                    <td style={tableStyle}>
-                      {alerta.diasRestantes}
-                    </td>
+              <td>{alerta.diasRestantes}</td>
 
-                    <td style={tableStyle}>
-                      {alerta.estado}
-                    </td>
+              <td>
+                {alerta.esPqrs ? "Sí" : "No"}
+              </td>
 
-                  </tr>
+            </tr>
 
-                ))
+          ))}
 
-              )}
-
-            </tbody>
-
-          </table>
-
-        </div>
-
-      </div>
-
-    </Layout>
+        </tbody>
+      </table>
+    </div>
   );
 }
-
-/* TARJETAS */
-const cardStyle = {
-  background: "white",
-  padding: "20px",
-  borderRadius: "10px",
-  textAlign: "center",
-  boxShadow: "0px 2px 10px rgba(0,0,0,0.1)",
-};
-
-{
-  alerta.fechaCreacion
-    ? new Date(alerta.fechaCreacion)
-        .toLocaleDateString("es-CO")
-    : ""
-}
-
-/* TABLA */
-const tableStyle = {
-  padding: "12px",
-  borderBottom: "1px solid #cbd5e1",
-  textAlign: "left",
-  color: "black",
-};
-
-export default Alertas;

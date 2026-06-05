@@ -1,17 +1,51 @@
-import Layout from "../components/Layout";
+import { useEffect, useState } from "react";
+
 
 function Reportes() {
-  return (
-    <Layout>
 
-      <h1 style={{ marginBottom: "20px" }}>
-        Reportes
-      </h1>
+  const [reportes, setReportes] = useState([]);
+  const [cargando, setCargando] = useState(true);
+
+  useEffect(() => {
+
+    fetch("http://localhost:7000/reportes")
+      .then((response) => {
+
+        if (!response.ok) {
+          throw new Error("Error al obtener reportes");
+        }
+
+        return response.json();
+      })
+      .then((data) => {
+
+        console.log("REPORTES RECIBIDOS:");
+        console.log(data);
+
+        setReportes(data || []);
+        setCargando(false);
+
+      })
+      .catch((error) => {
+
+        console.error("ERROR:");
+        console.error(error);
+
+        setReportes([]);
+        setCargando(false);
+
+      });
+
+  }, []);
+
+  return (
+    <>
 
       <h1 style={{ marginBottom: "20px" }}>
         Reportes y Estadísticas
       </h1>
 
+      {/* FILTROS */}
       <form
         style={{
           background: "white",
@@ -22,7 +56,6 @@ function Reportes() {
         }}
       >
 
-        {/* FECHA INICIO */}
         <div style={groupStyle}>
           <label style={{ color: "black" }}>
             Fecha Inicio
@@ -34,7 +67,6 @@ function Reportes() {
           />
         </div>
 
-        {/* FECHA FIN */}
         <div style={groupStyle}>
           <label style={{ color: "black" }}>
             Fecha Fin
@@ -46,7 +78,6 @@ function Reportes() {
           />
         </div>
 
-        {/* DEPENDENCIA */}
         <div style={groupStyle}>
           <label style={{ color: "black" }}>
             Dependencia
@@ -60,37 +91,8 @@ function Reportes() {
           </select>
         </div>
 
-        {/* TIPO DOCUMENTO */}
-        <div style={groupStyle}>
-          <label style={{ color: "black" }}>
-            Tipo Documento
-          </label>
-
-          <select style={inputStyle}>
-            <option>Seleccione</option>
-            <option>Entrada</option>
-            <option>Salida</option>
-            <option>Interno</option>
-          </select>
-        </div>
-
-        {/* ESTADO */}
-        <div style={groupStyle}>
-          <label style={{ color: "black" }}>
-            Estado
-          </label>
-
-          <select style={inputStyle}>
-            <option>Seleccione</option>
-            <option>Pendiente</option>
-            <option>En Proceso</option>
-            <option>Finalizado</option>
-          </select>
-        </div>
-
-        {/* BOTON */}
         <button
-          type="submit"
+          type="button"
           style={{
             background: "#2563eb",
             color: "white",
@@ -115,58 +117,116 @@ function Reportes() {
         }}
       >
 
-        <h2 style={{ marginBottom: "20px" }}>
-          Resultados Reporte
-        </h2>
-
-        <table
+        <h2
           style={{
-            width: "100%",
-            borderCollapse: "collapse",
+            marginBottom: "20px",
+            color: "black",
           }}
         >
+          Reportes Generados
+        </h2>
 
-          <thead>
-            <tr
-              style={{
-                background: "#2563eb",
-                color: "white",
-              }}
-            >
-              <th style={tableStyle}>Radicado</th>
-              <th style={tableStyle}>Tipo</th>
-              <th style={tableStyle}>Estado</th>
-              <th style={tableStyle}>Fecha</th>
-            </tr>
-          </thead>
+        <div style={{ overflowX: "auto" }}>
 
-          <tbody>
+          <table
+            style={{
+              width: "100%",
+              borderCollapse: "collapse",
+            }}
+          >
 
-            <tr>
-              <td style={tableStyle}>RAD-E-001</td>
-              <td style={tableStyle}>Entrada</td>
-              <td style={tableStyle}>Pendiente</td>
-              <td style={tableStyle}>25/05/2026</td>
-            </tr>
+            <thead>
+              <tr
+                style={{
+                  background: "#2563eb",
+                  color: "white",
+                }}
+              >
+                <th style={tableStyle}>ID</th>
+                <th style={tableStyle}>Tipo Reporte</th>
+                <th style={tableStyle}>Descripción</th>
+                <th style={tableStyle}>Formato</th>
+                <th style={tableStyle}>Usuario</th>
+                <th style={tableStyle}>Fecha Generación</th>
+              </tr>
+            </thead>
 
-            <tr>
-              <td style={tableStyle}>RAD-S-002</td>
-              <td style={tableStyle}>Salida</td>
-              <td style={tableStyle}>Finalizado</td>
-              <td style={tableStyle}>24/05/2026</td>
-            </tr>
+            <tbody>
 
-          </tbody>
+              {cargando ? (
 
-        </table>
+                <tr>
+                  <td
+                    colSpan="6"
+                    style={tableStyle}
+                  >
+                    Cargando reportes...
+                  </td>
+                </tr>
+
+              ) : reportes.length === 0 ? (
+
+                <tr>
+                  <td
+                    colSpan="6"
+                    style={tableStyle}
+                  >
+                    No existen reportes
+                  </td>
+                </tr>
+
+              ) : (
+
+                reportes.map((reporte) => (
+
+                  <tr key={reporte.id}>
+
+                    <td style={tableStyle}>
+                      {reporte.id}
+                    </td>
+
+                    <td style={tableStyle}>
+                      {reporte.tipoReporte}
+                    </td>
+
+                    <td style={tableStyle}>
+                      {reporte.descripcion}
+                    </td>
+
+                    <td style={tableStyle}>
+                      {reporte.formato}
+                    </td>
+
+                    <td style={tableStyle}>
+                      {reporte.usuarioId}
+                    </td>
+
+                    <td style={tableStyle}>
+                      {reporte.fechaGeneracion
+                        ? new Date(
+                            reporte.fechaGeneracion
+                          ).toLocaleDateString("es-CO")
+                        : "Sin fecha"}
+                    </td>
+
+                  </tr>
+
+                ))
+
+              )}
+
+            </tbody>
+
+          </table>
+
+        </div>
 
       </div>
 
-    </Layout>
+    </>
   );
 }
 
-/* INPUTS */
 const inputStyle = {
   width: "100%",
   padding: "12px",
@@ -176,12 +236,10 @@ const inputStyle = {
   background: "#f8fafc",
 };
 
-/* GRUPOS */
 const groupStyle = {
   marginBottom: "20px",
 };
 
-/* TABLA */
 const tableStyle = {
   padding: "12px",
   borderBottom: "1px solid #cbd5e1",

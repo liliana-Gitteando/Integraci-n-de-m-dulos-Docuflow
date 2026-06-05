@@ -1,8 +1,7 @@
-import Layout from "../components/Layout";
-
 function Dashboard() {
-  return (
-    <Layout>
+  
+    return (
+    <>
 
       <h1 style={{ marginBottom: "20px" }}>
         Dashboard DocuFlow
@@ -94,7 +93,7 @@ function Dashboard() {
 
       </div>
 
-    </Layout>
+    </>
   );
 }
 

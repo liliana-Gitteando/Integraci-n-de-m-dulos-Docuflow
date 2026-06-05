@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Layout from "../components/Layout";
 
 function Radicacion() {
 
@@ -55,7 +54,7 @@ function Radicacion() {
   };
 
   return (
-    <Layout>
+  <div>
 
       <h1 style={{ marginBottom: "20px" }}>
         Radicación de Documentos
@@ -227,8 +226,8 @@ function Radicacion() {
 
       </form>
 
-    </Layout>
-  );
+      </div>
+);
 }
 
 const inputStyle = {
