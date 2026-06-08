@@ -1,12 +1,60 @@
+import { useState } from "react";
+
 function Usuarios() {
+
+  const [nombre, setNombre] = useState("");
+  const [correo, setCorreo] = useState("");
+  const [rol, setRol] = useState("Administrador");
+  const [password, setPassword] = useState("");
+  const [estado, setEstado] = useState("Activo");
+
+  const guardarUsuario = async (e) => {
+    e.preventDefault();
+
+    const usuario = {
+  nombre,
+  rol,
+  contrasena: password
+};
+
+    try {
+      const response = await fetch(
+        "http://localhost:7000/usuarios",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(usuario)
+        }
+      );
+
+      if (response.ok) {
+        alert("Usuario guardado correctamente");
+
+        setNombre("");
+        setCorreo("");
+        setRol("Administrador");
+        setPassword("");
+        setEstado("Activo");
+      } else {
+        alert("Error al guardar usuario");
+      }
+
+    } catch (error) {
+      console.error(error);
+      alert("No se pudo conectar al servidor");
+    }
+  };
+
   return (
     <>
-
       <h1 style={{ marginBottom: "20px" }}>
         Gestión de Usuarios
       </h1>
 
       <form
+        onSubmit={guardarUsuario}
         style={{
           background: "white",
           padding: "30px",
@@ -15,41 +63,44 @@ function Usuarios() {
         }}
       >
 
-        {/* NOMBRE */}
         <div style={groupStyle}>
           <label style={{ color: "black" }}>
-          Nombre Completo
+            Nombre Completo
           </label>
 
           <input
             type="text"
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
             placeholder="Ingrese nombre"
             style={inputStyle}
           />
         </div>
 
-        {/* CORREO */}
         <div style={groupStyle}>
           <label style={{ color: "black" }}>
             Correo Electrónico
           </label>
-          
 
           <input
             type="email"
+            value={correo}
+            onChange={(e) => setCorreo(e.target.value)}
             placeholder="Ingrese correo"
             style={inputStyle}
           />
         </div>
 
-        {/* ROL */}
         <div style={groupStyle}>
           <label style={{ color: "black" }}>
             Rol
           </label>
-          
 
-          <select style={inputStyle}>
+          <select
+            value={rol}
+            onChange={(e) => setRol(e.target.value)}
+            style={inputStyle}
+          >
             <option>Administrador</option>
             <option>Radicador</option>
             <option>Archivista</option>
@@ -57,34 +108,35 @@ function Usuarios() {
           </select>
         </div>
 
-        {/* PASSWORD */}
         <div style={groupStyle}>
           <label style={{ color: "black" }}>
             Contraseña
           </label>
-          
 
           <input
             type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             placeholder="Ingrese contraseña"
             style={inputStyle}
           />
         </div>
 
-        {/* ESTADO */}
         <div style={groupStyle}>
-         <label style={{ color: "black" }}>
+          <label style={{ color: "black" }}>
             Estado
           </label>
-          
 
-          <select style={inputStyle}>
+          <select
+            value={estado}
+            onChange={(e) => setEstado(e.target.value)}
+            style={inputStyle}
+          >
             <option>Activo</option>
             <option>Inactivo</option>
           </select>
         </div>
 
-        {/* BOTON */}
         <button
           type="submit"
           style={{
@@ -100,12 +152,9 @@ function Usuarios() {
         </button>
 
       </form>
-
     </>
   );
 }
-
-/* INPUTS */
 const inputStyle = {
   width: "100%",
   padding: "12px",
@@ -113,10 +162,9 @@ const inputStyle = {
   borderRadius: "6px",
   border: "1px solid #cbd5e1",
   background: "#f8fafc",
-   color: "black",
+  color: "black",
 };
 
-/* GRUPOS */
 const groupStyle = {
   marginBottom: "20px",
 };
